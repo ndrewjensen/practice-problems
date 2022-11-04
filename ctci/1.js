@@ -44,8 +44,9 @@ function isUnique(string) {
 // can def solve in O(n^2) runtime by looping through from 0 to n then i to n
 
 
-// 1.2
-/* Given two strings, write a method to decide if one is a permutation of the
+
+/* 1.2
+Given two strings, write a method to decide if one is a permutation of the
 other.
 
 input: string1, string2
@@ -100,7 +101,7 @@ function isPermutation (str1,str2) {
   return Object.keys(counter2).length === 0;
 }
 
-/**
+/** 1.3
 URLify: Write a method to replace all spaces in a string with %20'. You may assume that the string
 has sufficient space at the end to hold the additional characters, and that you are given the "true"
 length of the string. (Note: If implementing in Java, please use a character array so that you can
@@ -145,7 +146,7 @@ function urlify (string) {
   return output.join("");
 }
 
-/**
+/** 1.4
 Palindrome Permutation: Given a string, write a function to check if it is a permutation of a palin-
 drome. A palindrome is a word or phrase that is the same forwards and backwards. A permutation
 is a rearrangement of letters. The palindrome does not need to be limited to just dictionary words.
@@ -182,6 +183,93 @@ function isPalindromePermutation(str) {
     if (counter[char] % 2 === 1) {
       oddCount ++;
       if (oddCount > 1) return false;
+    }
+  }
+  return true;
+}
+
+/** 1.5
+One Away: There are three types of edits that can be performed on strings: 
+insert a character,
+remove a character, 
+or replace a character. 
+
+Given two strings, write a function to check if they are one edit 
+(or zero edits) away.
+
+EXAMPLE
+pale, ple -> true
+pales, pale -> true
+pale, bale -> true
+pale, bake -> false
+"", "" -> true
+a, b -> true
+
+Questions:
+-how should I manage casing? 
+-will there be punctuation?
+
+Note: 
+-if length is more than 1 different, false
+-if lengths are the same, just count diffs and false if there is more than 1
+-if lengths are 1 diff, any diffs other than additional letter cause a fail.
+-I think I need two different code blocks, one for equal length and one for diff
+  lengths.
+
+Pseudocode:
+  -save lengths of both strings
+  -if lengths diff by > 1 return false
+  -declare a count of diffs variable
+  -if lengths equal
+    -loop through both strings,  
+      -if characters are not equal, increment diffs.
+      -if diffs > 1, return false
+  -if lengths off by 1
+    -determine shorter array
+    -declare i and j iterators
+    -while loop through shorter array
+      if characters are diff,
+        if diffs count = 1 return false
+        increment longer array iterator
+      else if increment both iterators
+ */
+
+function oneAway(str1, str2) {
+  const len1 = str1.length;
+  const len2 = str2.length;
+  const lenDiff = Math.abs(len1 - len2);
+  
+  if (lenDiff > 1) return false
+
+  let diffCount = 0;
+  if (lenDiff === 0) {
+    for (let i = 0; i < len1; i++) {
+      if (str1[i] !== str2[i]) {
+        if (diffCount === 1) return false;
+        diffCount ++;
+      }
+    }
+    return true;
+  }
+  let longerStr = "";
+  let shorterStr = "";
+  if (len1 > len2) {
+    longerStr = str1;
+    shorterStr = str2;
+  } else {
+    longerStr = str2;
+    shorterStr = str1;
+  }
+  let i = 0;
+  let j = 0;
+  while (i < shorterStr.length) {
+    if (str1[i] !== str2[i]) {
+      if (diffCount === 1) return false;
+      diffCount ++;
+      j++;
+    } else {
+      i++;
+      j++;
     }
   }
   return true;

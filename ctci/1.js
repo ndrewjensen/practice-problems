@@ -79,6 +79,7 @@ function makeFrequencyCounter(input) {
   const output = {};
 
   for (let char of input) {
+    if (char === " ") continue;
     let current = output[char.toLowerCase()] || 0;
     current++;
     output[char.toLowerCase()] = current;
@@ -99,3 +100,89 @@ function isPermutation (str1,str2) {
   return Object.keys(counter2).length === 0;
 }
 
+/**
+URLify: Write a method to replace all spaces in a string with %20'. You may assume that the string
+has sufficient space at the end to hold the additional characters, and that you are given the "true"
+length of the string. (Note: If implementing in Java, please use a character array so that you can
+perform this operation in place.)
+EXAMPLE
+Input:
+  "Mr John Smith", 13
+Output:
+  "Mr%20John%20Smith"
+
+Question: 
+  -I am aware that strings have a .replace method. May I use it?
+
+Since I'm solving in js, I can't mutate this string, and working with strings
+would be inefficent, so I'm inclined to loop through this string, build up an 
+array by replacing the spaces, then combine back to a string.
+
+
+
+This is inherently unsorted, so searching for spaces cannot be done in logn.
+Best conceivable runtime is O(n)., I'll use O(n) to loop through the string and 
+create the array, O(n) again to join it to a string.
+
+Pseudocode:
+declare empty output array;
+loop through string
+  for spaces, push %20 into the array
+  for non-spaces, push value into the array
+return a join of the array
+
+  */
+
+function urlify (string) {
+  const output = [];
+  for (let char of string) {
+    if (char === " ") {
+      output.push("%20");
+    } else {
+      output.push(char);
+    }
+  }
+  return output.join("");
+}
+
+/**
+Palindrome Permutation: Given a string, write a function to check if it is a permutation of a palin-
+drome. A palindrome is a word or phrase that is the same forwards and backwards. A permutation
+is a rearrangement of letters. The palindrome does not need to be limited to just dictionary words.
+You can ignore casing and non-letter characters.
+
+EXAMPLE
+Input:
+  Tact Coa
+Output:
+  True (permutations: 'taco cat', "atco cta", etc.)
+
+I want to use a hash table as a frequency counters. Each character must appear
+an even number of times, excluding one character in the event of an odd number 
+of characters.
+
+Will take me O(n) time to make a hash table, and O(1) time to check that all but
+one of the hash table values is even. If I encounter two odds, I can immediately
+return false.
+
+Pseudocode:
+Make hash table
+declare number of odds 
+loop through hash table
+  verify that all values are even
+  count the number of odd values
+    if odd, check that number of odd is less than 2 or return false
+return true
+ */
+
+function isPalindromePermutation(str) {
+  const counter = makeFrequencyCounter(str);
+  let oddCount = 0;
+  for (let char in counter) {
+    if (counter[char] % 2 === 1) {
+      oddCount ++;
+      if (oddCount > 1) return false;
+    }
+  }
+  return true;
+}

@@ -234,6 +234,9 @@ Pseudocode:
       else if increment both iterators
  */
 
+// this solution is almost identical to book, but they did some nice breaking up
+// of the functions and cut out the slightest bit of repeat code. Def same big o
+//s pace and time though.
 function oneAway(str1, str2) {
   const len1 = str1.length;
   const len2 = str2.length;
@@ -274,3 +277,60 @@ function oneAway(str1, str2) {
   }
   return true;
 }
+
+/** 1.6
+String Compression: Implement a method to perform basic string compression
+using the counts of repeated characters.  If the "compressed" string would not
+become smaller than the original string, your method should return the original 
+string. 
+
+You can assume the string has only uppercase and lowercase letters (a - z).
+
+For example, the string aabcccccaaa would become a2b1c5a3.
+
+So my idea is just to loop through the string and push into an array to build up
+my output. have a variable that's just the value of the current character, and 
+another that is the count of the current character. As long as the curr is the
+same as the previous, increment the counter. When they aren't equal, push the 
+character and the counter into the array.
+
+at the end, check the length of array against the string, and return the string
+or the stringified array.
+
+Pseudo code: 
+declare empty output array
+declare current character as first char in string
+declare a counter as 1
+loop through string
+  if current char is same, increment counter and continue
+  otherwise push char and counter into array and update char and counter
+return shorter compare length of input string and output array.
+ */
+
+//solution matches book solution
+function stringCompression(str) {
+  if (!str) return str;
+  const output = [];
+  let currentChar = str[0];
+  let count = 1;
+
+  for (let i = 1; i < str.length; i++) {
+    if (currentChar === str[i]) {
+      count++;
+      continue;
+    } else {
+      output.push(currentChar);
+      output.push(count);
+      currentChar = str[i];
+      count = 1;
+    }
+  }
+  output.push(currentChar);
+  output.push(count);
+  return ( str.length < output.length
+    ? str
+    : output.join("")
+  )
+}
+
+

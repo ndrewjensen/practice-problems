@@ -61,7 +61,8 @@ cato. & Taco. -> true
 t & To -> false
 
 Can do this with one or two hash tables, one would be diffs, two would be freq
-counters. Either way, we're talking best conceivable runtime O(n). 
+counters. Either way, we're talking best conceivable runtime O(n) because we
+need O(n) to create the hash table. looping through the hash table is O(1)
 
 Pseudo: Use a Hashtable as log of differences to solve in O(n) runtime
 if strings have diff lengths return false 
@@ -73,4 +74,28 @@ loop through length of strings
 loop through values of final hash table and verify that all are 0. 
 
 */
+
+function makeFrequencyCounter(input) {
+  const output = {};
+
+  for (let char of input) {
+    let current = output[char.toLowerCase()] || 0;
+    current++;
+    output[char.toLowerCase()] = current;
+  }
+
+  return output;
+}
+
+function isPermutation (str1,str2) {
+  if (str1.length !== str2.length) return false;
+  const counter1 = makeFrequencyCounter(str1);
+  const counter2 = makeFrequencyCounter(str2);
+  for (let char in counter1) {
+    if (counter1[char] === counter2[char]) {
+      delete counter2[char];
+    }
+  }
+  return Object.keys(counter2).length === 0;
+}
 

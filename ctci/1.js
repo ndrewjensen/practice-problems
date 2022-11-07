@@ -338,14 +338,71 @@ Rotate Matrix: Given an image represented by an N x N matrix, where each pixel
 in the image is represented by an integer, write a method to rotate the image by
 90 degrees. Can you do this in place?
 
-[ a b c ]
-[ d e f ]
-[ g h i ]
+[[ "a", "b", "c"],
+ [ "d", "e", "f"],
+ [ "g", "h", "i"]]
 ->
 [ g d a ]
 [ h e b ]
 [ i f c ]
 
- */
+[[ "a", "b", "c", "d" ],
+ [ "e", "f", "g", "h" ],
+ [ "i", "j", "k", "l" ],
+ [ "m", "n", "o", "p" ]]
+
+->
+[ m i e a ]
+[ n j f b ]
+[ o k g c ]
+[ p l h d ]
+
+best conceivable runtime is O(n^2), O(1) for space
+
+I don't know how to do this in place, yet.
+To solve into a new array, I need to loop through each inner matrix setting the 
+old x coord to be the new y, and setting the new x to be the (n-1) minus old y.
+
+In place might look like a loop, but we change four values at once, effectively
+rotating one set element, and each of the elements it displaces at the same time
+then moving to the next position
+  -would basically involve three pointers, left, right, and top
+  -because you would rotate through a triange, like this:
+   [[ a b c d ],
+    [   f g   ],
+    [         ],
+    [         ],
+    or 
+    [ a b c d e ]
+    [   g h i   ]
+    [     m     ]
+    [           ]
+    [           ]
+
+Pseudo code:
+return arrays of length <= 1
+declare empty output array of arrays
+loop through outer array
+  loop through inner array
+    set each element in correct output array position
+    [i][j] goes in at [n-1-j][i]
+return output array
+*/
+
+function rotate (items) {
+  const output = Array.from(Array(items.length), () => []);
+
+  for (let i = 0; i < items.length; i++) {
+    for (let j = 0; j < items.length; j++) {
+      let newRow = j;
+      let newCol = items.length-1-i;
+      output[newRow][newCol] = items[i][j];;
+
+    }
+  }
+
+  return output;
+}
+
 
 

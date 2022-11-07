@@ -333,4 +333,19 @@ function stringCompression(str) {
   )
 }
 
+/** 1.7
+Rotate Matrix: Given an image represented by an N x N matrix, where each pixel
+in the image is represented by an integer, write a method to rotate the image by
+90 degrees. Can you do this in place?
+
+[ a b c ]
+[ d e f ]
+[ g h i ]
+->
+[ g d a ]
+[ h e b ]
+[ i f c ]
+
+ */
+
 

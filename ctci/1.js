@@ -479,3 +479,22 @@ function zeroMatrix(items) {
   }
   return items;
 }
+
+/** 1.9
+String Rotation: Assume you have a method isSubstring which checks if one word
+is a substring of another. Given two strings, s1 and s2, write code to check if
+s2 is a rotation of s1 using only one call to isSubstring (e.g., "waterbottle"
+is a rotation of"erbottlewat').
+
+WOW did I ever need the hints on this one;
+
+pseudocode
+concat str1 with itself
+return a call isSubtring with str2 and the concatenated string
+ */
+
+function isStringRotation(str1,str2) {
+  if (!str1 || !str2 || str1.length !== str2.length) return false;
+  const concat = str1 + str1;
+  return isSubstring(concat,str2);
+}

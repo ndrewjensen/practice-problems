@@ -21,7 +21,7 @@ class LinkedList {
     if (this.tail !== null) this.tail.next = newNode;
     newNode.prev = this.tail;
     this.tail = newNode;
-    this.length ++;
+    this.length++;
   }
 
   pushNode(node, leftRight) {
@@ -30,28 +30,30 @@ class LinkedList {
         this.head.prev = node;
         node.next = this.head;
       } else {
-        this.tail = node
+        this.tail = node;
       }
-      this.head = node
-      this.length++
+      this.head = node;
+      this.length++;
     }
     if (leftRight === "right") {
       if (!this.head) {
-        this.head = node;  
+        this.head = node;
+        this.tail = node;
       } else {
-        this.tail.next = node
+        this.tail.next = node;
         node.prev = this.tail;
-        this.tail = node
+        this.tail = node;
       }
+      this.length++;
     }
   }
 
   pushNodeLeft(node) {
-    this.pushNode(node,"left");
+    this.pushNode(node, "left");
   }
 
   pushNodeRight(node) {
-    this.pushNode(node,"right");
+    this.pushNode(node, "right");
   }
 
   remove(node) {
@@ -63,14 +65,14 @@ class LinkedList {
       this.head.prev = null;
     } else if (this.tail === node) {
       node.prev.next = null;
-      this.tail = node.prev
+      this.tail = node.prev;
     } else {
       node.prev.next = node.next;
       node.next.prev = node.prev;
     }
     this.length--;
   }
-} 
+}
 
 /** 2.1
 Remove Dups: Write code to remove duplicates from an unsorted linked list.
@@ -107,7 +109,7 @@ function removeDups(ll) {
 
   while (node) {
     if (node.val in unique) {
-     ll.remove(node)
+      ll.remove(node);
     } else {
       unique[node.val] = true;
     }
@@ -147,18 +149,18 @@ function returnKthNode(ll, k) {
   let node = ll.head;
 
   while (node) {
-    n++
-    node = node.next; 
+    n++;
+    node = node.next;
   }
 
   const i = n - k;
   let j = 1;
-  node = ll.head
+  node = ll.head;
   while (j <= i) {
-    node = node.next
-    j++
+    node = node.next;
+    j++;
   }
-  return node
+  return node;
 }
 
 /** 2.3
@@ -176,7 +178,7 @@ next node
 
 function deleteMiddleNode(node) {
   node.val = node.next.val;
-  node.next = node.next.next
+  node.next = node.next.next;
 }
 
 /** 2.4
@@ -215,19 +217,17 @@ let trivial = new LinkedList();
 let trivial2 = new LinkedList();
 trivial2.push(5);
 
-
-function partition(list,x) {
+function partition(list, x) {
   let node = list.head;
   while (node) {
     if (node.val < x) {
-      list.pushNodeLeft(new Node(node.val))
-      list.remove(node)
-    } 
-    node = node.next
+      list.pushNodeLeft(new Node(node.val));
+      list.remove(node);
+    }
+    node = node.next;
   }
   return list;
 }
-
 
 /** 2.5
 sum Lists; You have two numbers represented by a linked list, where each node
@@ -268,32 +268,36 @@ loop while at least one of the number nodes in non-null
   else if 
     add node2 if its non-null
     next node2
+  add any overflow as a final node
   return sum node
  */
 
-function sumLists(list1,list2) {
-  let sumList = new LinkedList;
+function sumLists(list1, list2) {
+  let sumList = new LinkedList();
   let overflow = 0;
   let node1 = list1.head;
   let node2 = list2.head;
 
   while (node1 || node2) {
     if (node1 && node2) {
-      overflow = Math.floor((node1.val + node2.val) / 10)
-      sumList.pushNodeRight(new Node((node1.val + node2.val) % 10))
+      sumList.pushNodeRight(new Node((node1.val + node2.val + overflow) % 10));
+      overflow = Math.floor((node1.val + node2.val + overflow) / 10);
       node1 = node1.next;
       node2 = node2.next;
     } else if (node1) {
-      overflow = 0;
-      sumList.pushNodeRight(new Node(node1.val))
+      sumList.pushNodeRight(new Node(node1.val + overflow));
+      overflow = Math.floor((node1.val + overflow) / 10);
       node1 = node1.next;
     } else if (node2) {
-      overflow = 0;
-      sumList.pushNodeRight(new Node(node2.val))
+      sumList.pushNodeRight(new Node(node2.val + overflow));
+      overflow = Math.floor((node2.val + overflow) / 10);
       node2 = node2.next;
     }
   }
-  return sumList
+  if (overflow) {
+    sumList.pushNodeRight(new Node(overflow));
+  }
+  return sumList;
 }
 
 let list1 = new LinkedList();

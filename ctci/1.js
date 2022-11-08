@@ -453,4 +453,29 @@ loop colums zeroing out matrix columns
 
  */
 
-function zeroMatrix
+function zeroMatrix(items) {
+  if (items.length === 0 || items[0].length === 0 || !items[0]) return items 
+  const rows = {};
+  const cols = {};
+
+  for (let i = 0; i < items.length; i++) {
+    for (let j = 0; j < items[0].length; j++) {
+      if (items[i][j] === 0) {
+        rows[i] = true;
+        cols[j] = true;
+      }
+    }
+  }
+
+  for (let row in rows) {
+    for (let j = 0; j < items[0].length; j++) {
+      items[row][j] = 0;
+    }
+  }
+  for (let col in cols) {
+    for (let i = 0; i < items.length; i++) {
+      items[i][col] = 0;
+    }
+  }
+  return items;
+}

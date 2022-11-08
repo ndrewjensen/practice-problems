@@ -390,6 +390,7 @@ return output array
 */
 
 function rotate (items) {
+  if (items.length <2 ) return items;
   const output = Array.from(Array(items.length), () => []);
 
   for (let i = 0; i < items.length; i++) {
@@ -404,5 +405,52 @@ function rotate (items) {
   return output;
 }
 
+function rotateInPlace (items) {
+  const len = items.length - 1
+  if (items.length <2 ) return items;
+  let center = items.length % 2 === 0 
+    ? (items.length / 2) - 1
+    : Math.floor(items.length / 2)
+
+  let i = 0;
+  while (i <= center ) {
+    for (let j = i; j < len - i; j++) {
+      [items[i][j],items[j][len-i],items[len - i][len - j],items[len - j][i]] = [items[len - j][i],items[i][j],items[j][len-i],items[len - i][len - j]]
+    }
+    i++
+  }
+
+  return items;
+}
 
 
+/** 1.8
+Zero Matrix: Write an algorithm such that if an element in an Mx N matrix is O, 
+its entire row and column are set to 0.
+
+[ g d 0 ]
+[ h e b ]
+->
+[ 0 0 0 ]
+[ h e 0 ]
+
+BCR in O(n*m)
+
+nested for loops, record the rows and columns of all the zeros
+loop through again, updating all the zeros
+most efficient to use a set, but can do it with an object.
+
+pseudocode: 
+declare rows object
+declare columns object
+
+loop outer matrix
+  loop inner matrices
+    at each zero, add rows[i] and colums[j]
+
+loop rows zeroing out matrix rows
+loop colums zeroing out matrix columns
+
+ */
+
+function zeroMatrix

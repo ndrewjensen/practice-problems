@@ -1,21 +1,5 @@
 "use strict";
 
-/** 2.1
-Remove Dups: Write code to remove duplicates from an unsorted linked list.
-FOLLOW UP
-How would you solve this problem if a temporary buffer is not allowed? 
-  -if a buffer wasn't allowed, I would i would nest a loop. on each node, I
-  would loop through the rest of the nodes, deleting dupes. This would be O(1)
-  space but O(n^2) time
-
-Questions: 
-1. is the list singly-linked?
-2. is there a linked list class with a head property? 
-3. what is my input? a head node? or a linked list
-
-1,2,3,1,8,5,8,5,9,6,8 -> 1,2,3,8,5,9,6
-*/
-
 class Node {
   constructor(val) {
     this.val = val;
@@ -88,6 +72,22 @@ class LinkedList {
   }
 } 
 
+/** 2.1
+Remove Dups: Write code to remove duplicates from an unsorted linked list.
+FOLLOW UP
+How would you solve this problem if a temporary buffer is not allowed? 
+  -if a buffer wasn't allowed, I would i would nest a loop. on each node, I
+  would loop through the rest of the nodes, deleting dupes. This would be O(1)
+  space but O(n^2) time
+
+Questions: 
+1. is the list singly-linked?
+2. is there a linked list class with a head property? 
+3. what is my input? a head node? or a linked list
+
+1,2,3,1,8,5,8,5,9,6,8 -> 1,2,3,8,5,9,6
+*/
+
 let unsorted = new LinkedList();
 unsorted.push(1);
 unsorted.push(2);
@@ -141,7 +141,7 @@ Pseudcode:
 
 */
 
-
+//TODO: implement with a runner pointer
 function returnKthNode(ll, k) {
   let n = 0;
   let node = ll.head;
@@ -180,11 +180,12 @@ function deleteMiddleNode(node) {
 }
 
 /** 2.4
-Partition: Write code to partition a linked list around a value ×, such that all nodes less than x
-come before all nodes greater than or equal to x. (IMPORTANT: The partition element x can appear
-anywhere in the 'right partition"; it does not need to appear between the left and right partitions.
-The additional spacing in the example below indicates the partition. Yes, the output below is one
-of many valid outputs!)
+Partition: Write code to partition a linked list around a value ×, such that
+all nodes less than x come before all nodes greater than or equal to x.
+(IMPORTANT: The partition element x can appear anywhere in the 'right
+partition"; it does not need to appear between the left and right partitions.
+The additional spacing in the example below indicates the partition.
+Yes, the output below is one of many valid outputs!)
 EXAMPLE
 Input:
 Output:
@@ -226,3 +227,80 @@ function partition(list,x) {
   }
   return list;
 }
+
+
+/** 2.5
+sum Lists; You have two numbers represented by a linked list, where each node
+contains a single digit.The digits are stored in reverse order such that the 1's
+digit is at the head of the list. Write a function that adds the two numbers and
+returns the sum as a linked list. (You are not allowed to "cheat" and just 
+convert the linked list to an integer)
+
+EXAMPLE
+Input: (7-> 1 -> 6) + (5 -> 9
+-› 2). That is, 617 + 295.
+Output: 2 -> 1 -> 9. That is, 912.
+
+FOLLOW UP
+Suppose the digits are stored in forward order. Repeat the above problem
+
+EXAMPLE
+Input: (6 -> 1 -> 7) + (2 -> 9
+-> 5). That is, 617 + 295.
+Output: 9 -› 1 -> 2. That is, 912.
+
+The reverse order is a helpful. It means I can start at the head, adding each
+pair, carrying over any values > 10, left pushing a new node onto my sum list.
+I need to handle summing numbers with different numbers of digits.
+
+Pseudocode:
+declare a variable to store digit overflow
+declare a new linked list for the sum
+loop while at least one of the number nodes in non-null
+  if both nodes are non-null,
+    add them
+    add the overflow
+    update the overflow
+    next both nodes
+  else if 
+    add node1 if its non-null
+    next node1
+  else if 
+    add node2 if its non-null
+    next node2
+  return sum node
+ */
+
+function sumLists(list1,list2) {
+  let sumList = new LinkedList;
+  let overflow = 0;
+  let node1 = list1.head;
+  let node2 = list2.head;
+
+  while (node1 || node2) {
+    if (node1 && node2) {
+      overflow = Math.floor((node1.val + node2.val) / 10)
+      sumList.pushNodeRight(new Node((node1.val + node2.val) % 10))
+      node1 = node1.next;
+      node2 = node2.next;
+    } else if (node1) {
+      overflow = 0;
+      sumList.pushNodeRight(new Node(node1.val))
+      node1 = node1.next;
+    } else if (node2) {
+      overflow = 0;
+      sumList.pushNodeRight(new Node(node2.val))
+      node2 = node2.next;
+    }
+  }
+  return sumList
+}
+
+let list1 = new LinkedList();
+list1.push(9);
+list1.push(8);
+list1.push(7);
+let list2 = new LinkedList();
+list2.push(6);
+list2.push(5);
+list2.push(4);

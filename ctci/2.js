@@ -308,3 +308,111 @@ let list2 = new LinkedList();
 list2.push(6);
 list2.push(5);
 list2.push(4);
+
+/**2.6
+Palindrome: Implement a function to check if a linked list is a palindrome.
+
+easy with a doubly linked list, more challenging with a single list without
+a tail.
+
+Questions: do I have access to the list's length? tail? previous?
+
+BCR: O(n) time
+
+brute force: 
+1. put the list into an array and check it with array methods. O(n)
+2. create a second, reversed link list and walk through both
+
+
+Pseudocode:
+declare new list
+declarer counter of the #of nodes
+loop through list
+  push each val into new list
+loop through list
+  compare two lists up until round up of half of list
+
+Easy. No need to write it.
+
+ */
+
+/**2.7
+Intersection: Given two (singly) linked lists, determine if the two lists
+intersect. Return the intersecting node. Note that the intersection is defined
+based on reference, not value. That is, if the kth node of the first linked list
+is the exact same node (by reference) as the jth node of the second
+linked list, then they are intersecting.
+
+BCR O(n+m) time because I will need to loop through both lists.
+
+Assuming they are singly-linked, and that I don't know the tail or the length.
+
+
+Trick here is that the tail should def be the same. So lets just reverse both
+lists, loop through beginning at the new head comparing each node, return the
+last node that is the same. Or return null?
+
+Pseudocode: 
+
+Helper function: reverse a list and return it
+check that tails are the same and return null if they aren't.
+
+loop through lists
+  if nodes are not same, //can do this in the while condition with nexts
+return the node 
+
+
+ */
+
+const nodea = new Node("a");
+const nodeb = new Node("b");
+const nodec = new Node("c");
+const noded = new Node("d");
+const nodee = new Node("e");
+const nodef = new Node("f");
+const nodeg = new Node("g");
+const nodeh = new Node("h");
+const nodei = new Node("i");
+const nodej = new Node("j");
+
+const ll27a = new LinkedList();
+const ll27b= new LinkedList();
+ll27a.pushNodeRight(nodea);
+ll27a.pushNodeRight(nodeb);
+ll27a.pushNodeRight(nodec);
+ll27a.pushNodeRight(noded);
+ll27a.pushNodeRight(nodee);
+ll27b.pushNodeRight(nodei);
+ll27b.pushNodeRight(nodej);
+ll27b.pushNodeRight(nodeb);
+
+
+
+
+function reverseLL(list) {
+  const reversedList = new LinkedList();
+  let currNode = list.head;
+  while (currNode) {
+    let nextNode = currNode.next;
+    reversedList.pushNodeLeft(currNode);
+    currNode = nextNode;
+    //currNode = currNode.next;
+  }
+  return reversedList;
+}
+
+function findIntersection(list1, list2) {
+  const revList1 = reverseLL(list1);
+  const revList2 = reverseLL(list2);
+  let node1 = revList1.head;
+  let node2 = revList2.head;
+
+  if (node1 !== node2) return null;
+
+  while (node1.next === node2.next) {
+    node1 = node1.next;
+    node2 = node2.next;
+  }
+
+  return node1;
+}

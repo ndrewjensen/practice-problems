@@ -72,6 +72,18 @@ class LinkedList {
     }
     this.length--;
   }
+
+  reverse() {
+    const reversedList = new LinkedList();
+    let node = this.head;
+    while (node) {
+      [node.next,node.prev] = [node.prev,node.next]
+      node = node.prev;
+    }
+    [this.head,this.tail] = [this.tail,this.head]
+    return
+  }
+  
 }
 
 /** 2.1
@@ -348,71 +360,170 @@ BCR O(n+m) time because I will need to loop through both lists.
 Assuming they are singly-linked, and that I don't know the tail or the length.
 
 
-Trick here is that the tail should def be the same. So lets just reverse both
-lists, loop through beginning at the new head comparing each node, return the
-last node that is the same. Or return null?
+Trick here is that the tail should def be the same. So lets just loop through
+both lists to determine their length, check that their tails match. Then
+iterate through both of them at the same time (skipping ahead by the diff in
+their lengths) and return the first matching node.
 
 Pseudocode: 
 
-Helper function: reverse a list and return it
+declare counter for each list length
+declare currNode for each list
+loop through each list
+  increment counter
+  advance currNode
 check that tails are the same and return null if they aren't.
 
-loop through lists
-  if nodes are not same, //can do this in the while condition with nexts
-return the node 
+loop through longer list diff b/n lengths number of times
+  advance current node for longer list
+
+loop through both lists
+  if nodes are same, return node
+  otherwise advance both nodes
+return null
 
 
  */
+
+
+function findIntersection(list1, list2) {
+  let len1 = 0;
+  let len2 = 0;
+  let node1 = list1.head;
+  let node2 = list2.head;
+
+  while (node1) {
+    node1 = node1.next;
+    len1 ++;
+  }
+  while (node2) {
+    node2 = node2.next;
+    len2 ++;
+  }
+  if (node1 !== node2) return null;
+
+  let nodeLonger = list1.head;
+  let nodeShorter = list2.head;
+
+  if (len2 > len1) {
+    nodeLonger = list2.head
+    nodeShorter = list1.head;
+  }
+  
+  while (len1 !== len2) {
+    nodeLonger = nodeLonger.next;
+    len1 > len2 ? len1 -- : len2 --;
+  }
+
+  while (nodeLonger) {
+    if (nodeLonger === nodeShorter) return nodeLonger;
+    nodeLonger = nodeLonger.next;
+    nodeShorter = nodeShorter.next;
+  }
+
+  return null;
+}
+
+
+// const nodea = new Node("a");
+// const nodeb = new Node("b");
+// const nodec = new Node("c");
+// const noded = new Node("d");
+// const nodee = new Node("e");
+// const nodef = new Node("f");
+// const nodeg = new Node("g");
+// const nodeh = new Node("h");
+// const nodei = new Node("i");
+// const nodej = new Node("j");
+
+// const ll27a = new LinkedList();
+// const ll27b= new LinkedList();
+// ll27a.pushNodeRight(nodea);
+// ll27a.pushNodeRight(nodeb);
+// ll27a.pushNodeRight(nodec);
+// ll27a.pushNodeRight(noded);
+// ll27a.pushNodeRight(nodee);
+// ll27b.pushNodeRight(nodei);
+// ll27b.pushNodeRight(nodej);
+// ll27b.pushNodeRight(nodeb);
+
+
+/**2.8
+Loop Detection: Given a linked list which might contain a loop,
+implement an algorithm that returns the node at the beginning of
+the loop (if one exists).
+
+EXAMPLE
+Input: A -› B -> C -› D - E -› C (the same C as earlier)
+Output: C
+
+Hints: #50, #69, #83, #90
+
+BCR: O(n) runtime because you must look at every node
+
+I can do tihs in O(n) space and time. I'll declare a new Set, loop through the
+list, adding each node to the set and returning the first node that is already
+in the Set, or returning null after the loop.
+
+Psuedocode:
+declare new set
+declare the list head as the current node
+loop through nodes list while node is truthy
+  if node is in the set, return it
+  add the node to the set
+  advance the node
+return null
+
+ */
+
+function detectLoop(list) {
+  let haveSeen = new Set();
+  let node = list.head;
+  while (node) {
+    if (haveSeen.has(node)) return node;
+    haveSeen.add(node);
+    node = node.next;
+  }
+  return null
+}
+
+function detectLoopInPlace(list) {
+  let slowRunner = list.head;
+  if (!slowRunner || !slowRunner.next) return null;
+  let fastRunner = slowRunner.next;
+  while (fastRunner.next.next) {
+    if (slowRunner === fastRunner) {
+      return slowRunner;
+    }
+    slowRunner = slowRunner.next;
+    fastRunner = fastRunner.next.next;
+  }
+
+  return null
+}
 
 const nodea = new Node("a");
 const nodeb = new Node("b");
 const nodec = new Node("c");
 const noded = new Node("d");
 const nodee = new Node("e");
-const nodef = new Node("f");
-const nodeg = new Node("g");
-const nodeh = new Node("h");
-const nodei = new Node("i");
-const nodej = new Node("j");
+const nodea2 = new Node("a");
+const nodeb2 = new Node("b");
+const nodec2 = new Node("c");
+const noded2 = new Node("d");
+const nodee2 = new Node("e");
 
-const ll27a = new LinkedList();
-const ll27b= new LinkedList();
-ll27a.pushNodeRight(nodea);
-ll27a.pushNodeRight(nodeb);
-ll27a.pushNodeRight(nodec);
-ll27a.pushNodeRight(noded);
-ll27a.pushNodeRight(nodee);
-ll27b.pushNodeRight(nodei);
-ll27b.pushNodeRight(nodej);
-ll27b.pushNodeRight(nodeb);
+const loopNode = new LinkedList();
+loopNode.pushNodeRight(nodea);
+loopNode.pushNodeRight(nodeb);
+loopNode.pushNodeRight(nodec);
+loopNode.pushNodeRight(noded);
+loopNode.pushNodeRight(nodee);
+loopNode.pushNodeRight(nodec);
 
-
-
-
-function reverseLL(list) {
-  const reversedList = new LinkedList();
-  let currNode = list.head;
-  while (currNode) {
-    let nextNode = currNode.next;
-    reversedList.pushNodeLeft(currNode);
-    currNode = nextNode;
-    //currNode = currNode.next;
-  }
-  return reversedList;
-}
-
-function findIntersection(list1, list2) {
-  const revList1 = reverseLL(list1);
-  const revList2 = reverseLL(list2);
-  let node1 = revList1.head;
-  let node2 = revList2.head;
-
-  if (node1 !== node2) return null;
-
-  while (node1.next === node2.next) {
-    node1 = node1.next;
-    node2 = node2.next;
-  }
-
-  return node1;
-}
+const noLoopNode = new LinkedList();
+noLoopNode.pushNodeRight(nodea2);
+noLoopNode.pushNodeRight(nodeb2);
+noLoopNode.pushNodeRight(nodec2);
+noLoopNode.pushNodeRight(noded2);
+noLoopNode.pushNodeRight(nodee2);

@@ -69,18 +69,6 @@ class Stack {
     this.length++;
     return node;
   }
-
-  compareAndSwap(node: SNode): SNode | null {
-    if (!node.next) return node;
-    if (node.val <= node.next.val) return node.next;
-    if ((this.head = node)) {
-      this.head = node.next;
-    }
-    [node.val, node.next.val] = [node.next.val, node.val];
-    return node.next;
-  }
-
-  sortStack():none {}
 }
 
 /** QNode Class
@@ -303,6 +291,56 @@ Hints: #15, #32, #43
 
 */
 
+function sortedPush(
+  minStack: Stack,
+  maxStack: Stack,
+  bufferNode: SNode | null
+): void {
+  while (bufferNode && maxStack.peek()) {
+    if (bufferNode!.val < maxStack.peek()!.val) {
+      minStack.push(maxStack.pop()!);
+    } else {
+      maxStack.push(bufferNode!);
+      bufferNode = null;
+    }
+  }
+  if (bufferNode) maxStack.push(bufferNode);
+  return;
+}
+
+function sortStack(minStack: Stack): Stack {
+  const maxStack = new Stack();
+  let node = minStack.pop();
+  while (node) { //adds all nodes to max stack, sorted with max on top
+    sortedPush(minStack, maxStack, node);
+    node = minStack.pop();
+    if (!node) break;
+  }
+
+  while (maxStack.peek()) { //return all nodes to min stack, sorted with min on top
+    minStack.push(maxStack.pop()!);
+  }
+  return minStack;
+}
+
+function printStack(stack: Stack): void {
+  let node = stack.head;
+  while (node) {
+    console.log(node.val);
+    node = node.next;
+  }
+}
+const stackToSort: Stack = new Stack();
+stackToSort.push(new SNode(0));
+stackToSort.push(new SNode(2));
+stackToSort.push(new SNode(1));
+stackToSort.push(new SNode(5));
+
+console.log("unsorted Stack");
+printStack(stackToSort);
+console.log("sorted Stack:");
+printStack(sortStack(stackToSort));
+
 /** 3.6
 Animal Shelter: An animal shelter, which holds only dogs and cats, operates on a
 strictly"first in, first out" basis. People must adopt either the "oldest"
@@ -326,7 +364,6 @@ enqueue: add an animal to the end
 
 */
 
-
 interface ANode {
   species: string;
   val: string;
@@ -339,7 +376,7 @@ interface Shelter {
 }
 
 class ANode {
-  constructor(val:string, species:string) {
+  constructor(val: string, species: string) {
     this.val = val;
     this.species = species;
     this.next = null;
@@ -351,7 +388,7 @@ class Shelter {
     this.tail = null;
   }
 
-  enqueue(pet: ANode):void {
+  enqueue(pet: ANode): void {
     if (!this.head) {
       this.head = pet;
       this.tail = pet;
@@ -361,33 +398,33 @@ class Shelter {
     }
   }
 
-  dequeueAny(): ANode | null{
+  dequeueAny(): ANode | null {
     if (!this.head) return null;
     const pet = this.head;
     this.head = this.head.next;
     return pet;
   }
-  
+
   dequeueDog(): ANode | null {
     return this.dequeuePet("Dog");
   }
-  
+
   dequeueCat(): ANode | null {
     return this.dequeuePet("Cat");
   }
 
-  dequeuePet(species:string): ANode | null {
+  dequeuePet(species: string): ANode | null {
     if (!this.head) return null;
     let pet = this.head;
-    if (pet.species = species) {
+    if ((pet.species = species)) {
       return this.dequeueAny();
     }
-    let prev = pet;  
+    let prev = pet;
     while (pet.next) {
       pet = pet.next;
-      if (pet.species = species) {
+      if ((pet.species = species)) {
         prev.next = pet.next;
-        return pet
+        return pet;
       }
       prev = pet;
     }

@@ -3,7 +3,6 @@ interface GNode {
   val: string | number;
   adj: GNode[];
   qnext: GNode | null;
-  checked: boolean;
 }
 
 class GNode {
@@ -11,7 +10,6 @@ class GNode {
     this.val = val;
     this.adj = adj;
     this.qnext = null;
-    this.checked = false;
   }
 }
 
@@ -40,7 +38,6 @@ class GQueue {
     }
     this.tail = node;
     this.length ++;
-    node.checked = false;
     return node;
 
   }
@@ -50,7 +47,6 @@ class GQueue {
     let node: GNode = this.head!;
     this.head = this.head!.qnext;
     node.qnext = null;
-    node.checked = true;
     this.length --;
     return node;
   }
@@ -92,20 +88,24 @@ class Graph {
   S === E => true
   S has a route to E => true
   S and E exist in Graph with no route => false
+
   */
 
   checkRouteExists (S: GNode, E: GNode): boolean {
     const queue = new GQueue();
+    let checked  = new Set;
     queue.add(S);
+    let routeExists = false;
     while (!queue.isEmpty()) {
       let current = queue.remove();
-      if (current === E) return true;
+      checked.add(current);
+      if (current === E) routeExists = true;
       for (let sibling of current!.adj) {
-        if (sibling.checked === false) queue.add(sibling);
+        if (!checked.has(sibling)) queue.add(sibling);
       }
 
     }
-    return false;
+    return routeExists;
   }
 }
 

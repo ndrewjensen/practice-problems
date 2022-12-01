@@ -1,3 +1,7 @@
+namespace othree {
+
+
+
 /** SNode Class
  * for use in Stacks and Queues, all methods stored in stacks and queues
  */
@@ -430,4 +434,5 @@ class Shelter {
     }
     return null;
   }
+}
 }

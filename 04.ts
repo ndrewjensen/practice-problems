@@ -1,3 +1,4 @@
+namespace fourpointone {
 
 interface GNode {
   val: string | number;
@@ -107,6 +108,7 @@ class Graph {
     }
     return routeExists;
   }
+
 }
 
 /** 4.1 Test */
@@ -144,3 +146,145 @@ F3.adj.push(E3)
 //G3.checkRouteExists(S3,E3) => true
 //G3.checkRouteExists(A3,E3) => true
 //G3.checkRouteExists(B3,E3) => false
+
+}
+
+
+/** 4.2
+ Minimal Tree: Given a sorted (increasing order) array with unique integer
+elements, write an algorithm to create a binary search tree with minimal
+height.
+
+BCR is O(n) because you have to visit every element in the array.
+adding from left or right would make a completely unbalanced tree, so how
+about middle out?
+
+input: sorted array of unique integer elements
+output: BST with minimal height
+
+example: [1,2,3,4,5,6,7,8,9] =>
+          5
+      3       7
+    2     4  6   8
+  1                9
+
+*/
+
+
+interface BSTNode {
+  val: number;
+  left: BSTNode | null;
+  right: BSTNode | null;
+}
+
+class BSTNode {
+  constructor(val: number, left = null, right = null) {
+    this.val = val;
+    this.left = left;
+    this.right = right;
+  }
+}
+
+interface BST {
+  root: BSTNode | null;
+}
+
+class BST {
+  constructor(root: BSTNode | null = null) {
+    this.root = root;
+  }
+
+  add(addNode: BSTNode, currNode: BSTNode | null = this.root): void {
+    if (!currNode) {
+      this.root = addNode;
+    } else if (addNode.val < currNode.val){
+      if (currNode.left) {
+        this.add(addNode,currNode.left)
+      } else {
+        currNode.left = addNode;
+      }
+    } else {
+      if (currNode.right) {
+        this.add(addNode,currNode.right)
+      } else {
+        currNode.right = addNode;
+      }
+    }
+  }
+}
+
+function minimalBST(ints: number[], tree: BST): BST {
+  if (ints.length === 1) {
+    tree.add(new BSTNode(ints[0]));
+    return tree
+  } else if (ints.length === 0) {
+    return tree
+  } else {
+    let length  = ints.length
+    tree.add(new BSTNode(ints[Math.floor(length/2)]))
+    minimalBST(ints.slice(0,Math.floor(length/2)),tree)
+    if (length % 2 === 1) {
+      minimalBST(ints.slice(Math.ceil(length/2),length),tree)
+    } else {
+      minimalBST(ints.slice(Math.ceil(length/2)+1,length),tree)
+    }
+  }
+  
+  return tree
+
+}
+
+/* 
+interface QNode {
+  val: BSTNode;
+  next: QNode | null;
+}
+
+class QNode {
+  constructor(val: BSTNode) {
+    this.val = val;
+    this.next = null;
+  }
+}
+
+interface BSTQueue {
+  head: QNode | null;
+  tail: QNode | null;
+  length: number;
+}
+
+class BSTQueue {
+  constructor () {
+    this.head = null;
+    this.tail = null;
+    this.length = 0;
+  }
+
+  isEmpty(): boolean {
+    return this.length === 0;
+  }
+
+  add(node: QNode): QNode {
+    if (!this.head) {
+      this.head = node;
+    } else {
+      this.tail!.next = node
+    }
+    this.length ++;
+    this.tail = node;
+    return node
+  }
+
+  remove(): QNode | null {
+    if (this.isEmpty()) return null;
+    let node: QNode = this.head!;
+    this.head = this.head!.next;
+    this.length --;
+    return node;
+  }
+
+  peek(): QNode | null {
+    return this.head;
+  }
+}
+ */

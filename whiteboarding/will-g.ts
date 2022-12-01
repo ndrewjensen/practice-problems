@@ -35,51 +35,55 @@ output: [ ["practice", "3"], ["perfect", "2"],
 
           */
 
-function wordCountEngine(document:string) {
+function wordCountEngine(document: string) {
   //need some edge case handling on multiple spaces and leading and trailing spaces
-//const punctuation: string[] = ["'",",",".",":",";","!","?"] // et al
-//const withoutPunctuation = document.toLowerCase().replace(/[^a-z]/g, "")
 
-for (let char of punctuation) {
-  //if (char < "a" || char > "z")
-  document = document.replace(/[^a-z]/ig,""); 
-  //document = document.replace(/[^a-zA-z]/ig,""); 
-}
-const words = document.split(" ");
+  //remove leading and trailing whitespace, make lowercase, and strip out punctuation
+  document = document
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z\s]/gi, "")
+    .replace(/  +/g, " ");
 
-const freqCount = new Map;
-for (let word of words) {
-  word = word.toLowerCase();
-  if (freqCount.has(word)) {
-    freqCount.set(word,freqCount.get(word)+1) 
-  } else {
-    freqCount.set(word,1);
+  const words = document.split(" ");
+  const freqCount = new Map();
+
+  //build frequency counter
+  for (let word of words) {
+    if (freqCount.has(word)) {
+      freqCount.set(word, freqCount.get(word) + 1);
+    } else {
+      freqCount.set(word, 1);
+    }
   }
+
+  //convert frequencies to an array and sort them by the freq, which is the
+  //second value in the tuple
+  const output = [...freqCount.entries()];
+  output.sort((a, b) => b[1] - a[1]);
+
+  //stringify the frequencies, per the example
+  for (let word of output) {
+    word[1] = `${word[1]}`;
+  }
+
+  return output;
 }
-
-const output = [...freqCount.entries()]
-output.sort((a,b)=> b[1]-a[1])
-
-for (let word of output) {
-  word[1] = `${word[1]}`
-}
-
-return output;
-}
-
-
 
 /*
 
 
-Your friends are now complaining that it's too hard to make sure the lengths of their status updates are not prime numbers.
+Your friends are now complaining that it's too hard to make sure the lengths of
+their status updates are not prime numbers.
 
-You decide to create a substitution cipher. The cipher alphabet is based on a key shared amongst those of your friends who don't mind spoilers.
+You decide to create a substitution cipher. The cipher alphabet is based on a
+key shared amongst those of your friends who don't mind spoilers.
 
 Suppose the key is:
 "The quick onyx goblin, grabbing his sword, jumps over the lazy dwarf!".
 
-We use only the unique letters in this key to set the order of the characters in the substitution table.
+We use only the unique letters in this key to set the order of the characters in
+the substitution table.
 
 T H E Q U I C K O N Y X G B L R A S W D J M P V Z F
 
@@ -89,9 +93,11 @@ We then align it with the regular alphabet:
 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
 T H E Q U I C K O N Y X G B L R A S W D J M P V Z F
 
-Which gives us the substitution mapping: A becomes T, B becomes H, C becomes E, etc.
+Which gives us the substitution mapping: A becomes T, B becomes H, C becomes E, 
+etc.
 
-Write a function that takes a key and a string and encrypts the string with the key.
+Write a function that takes a key and a string and encrypts the string with the
+key.
 
 Example:
 key = "The quick onyx goblin, grabbing his sword, jumps over the lazy dwarf!"
@@ -114,17 +120,47 @@ the cypher
 
 */
 
-function encrypt(message:string, key: string) {
+function encrypt(message: string, key: string) {
   const cypher = new Set();
-  const abcd = {a:"",b:"",c:"",} //et al
-  key = key.replace(/[^a-z]/ig,""); //this is a great way to remove punctuation
+  const abcd = {
+    a: "",
+    b: "",
+    c: "",
+    d: "",
+    e: "",
+    f: "",
+    g: "",
+    h: "",
+    i: "",
+    j: "",
+    k: "",
+    l: "",
+    m: "",
+    n: "",
+    o: "",
+    p: "",
+    q: "",
+    r: "",
+    s: "",
+    t: "",
+    u: "",
+    v: "",
+    w: "",
+    x: "",
+    y: "",
+    z: "",
+  };
+  key = key
+    .trim()
+    .replace(/[^a-z\s]/gi, "") // remove punctuation
+    .replace(/  +/g, " "); // remove 2 or more spaces
+
   for (let char of key) {
-    
     if (!cypher.has(char)) {
-      cypher.add(char)
+      cypher.add(char);
     }
   }
-  const cypherArray = [...cypher]
+  const cypherArray = [...cypher];
   let i = 0;
   for (let char in abcd) {
     abcd[char] = cypherArray[i];
@@ -141,5 +177,5 @@ function encrypt(message:string, key: string) {
     }
   }
 
-  return messageArray.join("")
+  return messageArray.join("");
 }

@@ -380,21 +380,65 @@ each recursion returns max depth - min depth <2
 function checkBalanced(
   bt: BST,
   node: BSTNode | null = bt.root,
-  depth: number = 1,
-  minDepth: number = 1,
-  maxDepth: number = 1,
+  depths: number[] = [1,0,0],
 ): boolean {
   if (!bt.root) return true;
+  depths[0]++; //increment depth every time function is called
   if (!node) {
-    depth --;
-    if (depth > maxDepth) maxDepth = depth;
-    if (depth < minDepth || minDepth === 0 ) minDepth = depth;
-    return (maxDepth - minDepth) <= 1;
+    depths[0] --; //decrement depth if a null node is reached
+    if (depths[0] > depths[2]) depths[2] = depths[0];
+    if (depths[0] < depths[1] || depths[1] === 0 ) depths[1] = depths[0];
+    return (depths[2] - depths[1]) <= 1;
   }
-  
-  if (depth > maxDepth) maxDepth = depth;
-  if (depth < minDepth || minDepth === 0 ) minDepth = depth;
-  if (!checkBalanced(bt,node.left,depth+1,minDepth,maxDepth)) return false;
-  if (!checkBalanced(bt,node.right,depth+1,minDepth,maxDepth)) return false;
+  if (!checkBalanced(bt,node.left,depths)) return false;
+  if (!checkBalanced(bt,node.right,depths)) return false;
+  depths[0]--; //decrement depth every time we move up the tree
   return true
+}
+
+/** fore testing 4.4
+let bTree = new BST;
+let ordered = [1,2,3,4,5,6,7,8,9]
+minimalBST(ordered,bTree);
+let ubTree = new BST;
+let unordered = [5,3,1,2,4];
+minimalBST(unordered,ubTree);
+ */
+
+/** 4.5
+Validate BST: Implement a function to check if a binary tree is a binary search
+tree.
+
+BCR O(n), must visit every node on the tree.
+DFS (recursive) check that every left is less than current, and every right is
+greater than current.
+
+input: tree, node
+output: boolean
+
+//don't pass in null nodes, check truthiness first
+//check that tree root is truthy.
+
+on each node, if left exists
+  if left is greater than current, return false
+  recurse on left
+on each node, if right exists
+  if right is less than current, return false
+  recurse on right
+
+return true
+
+ */
+
+function isBST(tree: BST, node: BSTNode | null = tree.root): boolean {
+  if (!node) return true;
+  if (node.left) {
+    if (node.left.val > node.val) return false;
+    if (!isBST(tree,node.left)) return false;
+  }
+  if (node.right) {
+    if (node.right.val < node.val) return false;
+    if (!isBST(tree,node.right)) return false;
+  }
+  return true;
 }

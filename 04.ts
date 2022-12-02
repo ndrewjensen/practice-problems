@@ -374,26 +374,26 @@ max depth
 each recursion returns max depth - min depth <2
 
 */
-//FIXME: Need to figure out how to pass the min and max depths back up the 
+//FIXME: Need to figure out how to pass the min and max depths back up the
 //call stack, currently, they are reset to zero each time a call pops off the
 //stack.
 function checkBalanced(
   bt: BST,
   node: BSTNode | null = bt.root,
-  depths: number[] = [1,0,0],
+  depths: number[] = [1, 0, 0]
 ): boolean {
   if (!bt.root) return true;
   depths[0]++; //increment depth every time function is called
   if (!node) {
-    depths[0] --; //decrement depth if a null node is reached
+    depths[0]--; //decrement depth if a null node is reached
     if (depths[0] > depths[2]) depths[2] = depths[0];
-    if (depths[0] < depths[1] || depths[1] === 0 ) depths[1] = depths[0];
-    return (depths[2] - depths[1]) <= 1;
+    if (depths[0] < depths[1] || depths[1] === 0) depths[1] = depths[0];
+    return depths[2] - depths[1] <= 1;
   }
-  if (!checkBalanced(bt,node.left,depths)) return false;
-  if (!checkBalanced(bt,node.right,depths)) return false;
+  if (!checkBalanced(bt, node.left, depths)) return false;
+  if (!checkBalanced(bt, node.right, depths)) return false;
   depths[0]--; //decrement depth every time we move up the tree
-  return true
+  return true;
 }
 
 /** fore testing 4.4
@@ -430,15 +430,27 @@ return true
 
  */
 
-function isBST(tree: BST, node: BSTNode | null = tree.root): boolean {
+function isBST(
+  tree: BST,
+  node: BSTNode | null = tree.root,
+  min: number | null = null,
+  max: number | null = null
+): boolean {
   if (!node) return true;
   if (node.left) {
+    max = Math.max(max!, node.val);
     if (node.left.val > node.val) return false;
-    if (!isBST(tree,node.left)) return false;
+    if (min && node.left.val < min) return false;
+    if (!isBST(tree, node.left, min, max)) return false;
   }
+  if (node.val === max) max = null;
+  if (node.val === min) min = null;
+
   if (node.right) {
+    min = Math.min(min || Infinity, node.val);
     if (node.right.val < node.val) return false;
-    if (!isBST(tree,node.right)) return false;
+    if (max && node.right.val > max) return false;
+    if (!isBST(tree, node.right, min, max)) return false;
   }
   return true;
 }

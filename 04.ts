@@ -356,3 +356,45 @@ function listDepths(bt: BST): LLNode[] {
   }
   return lists;
 }
+
+/** 4.4
+Check Balanced: Implement a function to check if a binary tree is balanced. For
+the purposes of this question, a balanced tree is defined to be a tree such that
+the heights of the two subtrees of any node never differ by more than one.
+
+to check depth, should recurse, record a min depth and a max depth, 
+return false if max - min is greater than 1
+
+arguments will need to be:
+current node - which defaults to root
+current depth - which increments with each recursion and decrements with each 
+  completion
+min depth
+max depth
+each recursion returns max depth - min depth <2
+
+*/
+//FIXME: Need to figure out how to pass the min and max depths back up the 
+//call stack, currently, they are reset to zero each time a call pops off the
+//stack.
+function checkBalanced(
+  bt: BST,
+  node: BSTNode | null = bt.root,
+  depth: number = 1,
+  minDepth: number = 1,
+  maxDepth: number = 1,
+): boolean {
+  if (!bt.root) return true;
+  if (!node) {
+    depth --;
+    if (depth > maxDepth) maxDepth = depth;
+    if (depth < minDepth || minDepth === 0 ) minDepth = depth;
+    return (maxDepth - minDepth) <= 1;
+  }
+  
+  if (depth > maxDepth) maxDepth = depth;
+  if (depth < minDepth || minDepth === 0 ) minDepth = depth;
+  if (!checkBalanced(bt,node.left,depth+1,minDepth,maxDepth)) return false;
+  if (!checkBalanced(bt,node.right,depth+1,minDepth,maxDepth)) return false;
+  return true
+}

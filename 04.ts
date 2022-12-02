@@ -168,6 +168,7 @@ interface BSTNode {
   val: number;
   left: BSTNode | null;
   right: BSTNode | null;
+  parent: BSTNode | null;
 }
 
 class BSTNode {
@@ -190,17 +191,20 @@ class BST {
   add(addNode: BSTNode, currNode: BSTNode | null = this.root): void {
     if (!currNode) {
       this.root = addNode;
+      addNode.parent = null;
     } else if (addNode.val < currNode.val) {
       if (currNode.left) {
         this.add(addNode, currNode.left);
       } else {
         currNode.left = addNode;
+        addNode.parent = currNode;
       }
     } else {
       if (currNode.right) {
         this.add(addNode, currNode.right);
       } else {
         currNode.right = addNode;
+        addNode.parent = currNode;
       }
     }
   }
@@ -453,4 +457,46 @@ function isBST(
     if (!isBST(tree, node.right, min, max)) return false;
   }
   return true;
+}
+
+/**4.6
+Successor: Witte an algorithm to find the "next" node (i.e, in-order successor)
+of a given node in a binary search tree. You may assume that each node has a
+link to its parent.
+
+ 
+
+if the node is a right leaf node, 
+
+
+return null
+ */
+
+function findSuccessor(node: BSTNode): BSTNode | null {
+  if (!node) return null;
+
+  //if the node is a right leaf node, move up to first non right-child parent
+  if (!node.right && node.parent && node.parent.right === node) {
+    node = node.parent;
+    while (node.parent && node.parent.right === node) {
+      node = node.parent;
+    }
+    return node.parent
+  }
+
+  //if the node is a left node, with no right-child, return it's parent.
+  if (node.parent && !node.right && node === node.parent.left)
+  return node.parent;
+  
+  //if the node is a parent, return the leftmost node of its right subtree.
+  if (node.right) {
+    node = node.right;
+    while (node.left) {
+      node = node.left;
+    }
+    return node;
+  }
+  
+
+  return null;
 }

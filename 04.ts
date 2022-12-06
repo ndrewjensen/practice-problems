@@ -378,36 +378,33 @@ max depth
 each recursion returns max depth - min depth <2
 
 */
-//FIXME: Need to figure out how to pass the min and max depths back up the
-//call stack, currently, they are reset to zero each time a call pops off the
-//stack.
-function checkBalanced(
-  bt: BST,
-  node: BSTNode | null = bt.root,
-  depths: number[] = [1, 0, 0]
+
+function isBalanced(
+  node: BSTNode | null,
+  depth: number = 0,
 ): boolean {
-  if (!bt.root) return true;
-  depths[0]++; //increment depth every time function is called
-  if (!node) {
-    depths[0]--; //decrement depth if a null node is reached
-    if (depths[0] > depths[2]) depths[2] = depths[0];
-    if (depths[0] < depths[1] || depths[1] === 0) depths[1] = depths[0];
-    return depths[2] - depths[1] <= 1;
+  if (!node) return true
+  let leftDepth = checkDepths(node.left, depth +1);
+  let rightDepth = checkDepths(node.right,depth +1)
+  console.log("leftDepth, rightDepth", leftDepth, rightDepth);
+  if (Math.abs(leftDepth - rightDepth) > 1) {
+      return false;
+  } else {
+      if (!isBalanced(node.left)) return false
+      if (!isBalanced(node.right)) return false
   }
-  if (!checkBalanced(bt, node.left, depths)) return false;
-  if (!checkBalanced(bt, node.right, depths)) return false;
-  depths[0]--; //decrement depth every time we move up the tree
-  return true;
+  return true
 }
 
-/** fore testing 4.4
-let bTree = new BST;
-let ordered = [1,2,3,4,5,6,7,8,9]
-minimalBST(ordered,bTree);
-let ubTree = new BST;
-let unordered = [5,3,1,2,4];
-minimalBST(unordered,ubTree);
- */
+function checkDepths(node: BSTNode | null, depth:number = 0):number {
+    // console.log("node, depth", node, depth);
+    if (!node) return depth -1;
+    return (Math.max(
+        node.left && checkDepths(node.left, depth + 1) || depth,
+        node.right && checkDepths(node.right, depth + 1) || depth)
+        )
+}
+//https://leetcode.com/problems/balanced-binary-tree/submissions/855755839/
 
 /** 4.5
 Validate BST: Implement a function to check if a binary tree is a binary search
@@ -500,3 +497,36 @@ function findSuccessor(node: BSTNode): BSTNode | null {
 
   return null;
 }
+
+/** 4.7
+Build Order: You are given a list of projects and a list of dependencies (which 
+is a list of pairs of projects, where the second project is dependent on the
+first project). All of a project's dependencies must be built before the project
+is. Find a build order that will allow the projects to be built. If there is no
+valid build order, return an error.
+
+EXAMPLE
+Input:
+projects: a, b, c, d, e, f
+dependencies: (a, d), (f, b), (b, d), (f, a), (d, c)
+Output: f, e, a, b, d, c
+
+-the dependencies have the properties of a graph, but I think that a stack will
+  be the most effective. 
+-val:string, dependencies: node[], - each node will be a map key as proj name
+  and value as dependencies
+-take input list, make set of nodes
+-iterate through dependency tuples, updating the nodes with their dependencies
+-remove first node from set, push onto stack
+-iterate while set.size is not 0
+  -remove node from set and add to queue
+  -iterate through queue - while queue is not empty
+    -if top of stack has dependencies
+      if dependency is still in stack
+        remove from set
+        add  to stack
+        continue
+      else return error
+    -else pop them off stack and push val into output array
+
+*/

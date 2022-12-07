@@ -65,7 +65,7 @@ function printPermutations(shortString, longString) {
     slidingWindow = longString.slice(i - len + 1, i + 1);
     if (isPermutation) {
       if (rem === add) {
-        console.log(slidingWindow);
+
       } else {
         isPermutation = false;
       }

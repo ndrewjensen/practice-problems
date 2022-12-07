@@ -330,7 +330,6 @@ function sortStack(minStack: Stack): Stack {
 function printStack(stack: Stack): void {
   let node = stack.head;
   while (node) {
-    console.log(node.val);
     node = node.next;
   }
 }
@@ -340,9 +339,7 @@ stackToSort.push(new SNode(2));
 stackToSort.push(new SNode(1));
 stackToSort.push(new SNode(5));
 
-console.log("unsorted Stack");
 printStack(stackToSort);
-console.log("sorted Stack:");
 printStack(sortStack(stackToSort));
 
 /** 3.6

@@ -386,7 +386,6 @@ function isBalanced(
   if (!node) return true
   let leftDepth = checkDepths(node.left, depth +1);
   let rightDepth = checkDepths(node.right,depth +1)
-  console.log("leftDepth, rightDepth", leftDepth, rightDepth);
   if (Math.abs(leftDepth - rightDepth) > 1) {
       return false;
   } else {
@@ -397,7 +396,6 @@ function isBalanced(
 }
 
 function checkDepths(node: BSTNode | null, depth:number = 0):number {
-    // console.log("node, depth", node, depth);
     if (!node) return depth -1;
     return (Math.max(
         node.left && checkDepths(node.left, depth + 1) || depth,

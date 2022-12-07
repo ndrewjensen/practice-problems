@@ -7,8 +7,6 @@ export default function Third(): JSX.Element {
   for (const contents of rucksackContents) {
     const itemsCount = contents.length;
     const contentsSet = new Set(contents.split("").slice(0, itemsCount / 2));
-    console.log(itemsCount);
-    console.log(contentsSet);
     for (let i = itemsCount / 2; i < itemsCount; i++) {
       if (contentsSet.has(contents[i])) {
         prioritiesSum += priorities[contents[i]];

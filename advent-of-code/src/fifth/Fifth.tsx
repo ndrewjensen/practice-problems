@@ -27,11 +27,7 @@ export default function Fifth(): JSX.Element {
     const fromStack = stacks2[move[1] - 1];
     const crates = fromStack.splice(fromStack.length - move[0], move[0]);
     toStack.push(...crates);
-    console.log("crates",crates);
-    console.log("toStack",toStack);
-    console.log("fromStack",fromStack);
   }
-  console.log(stacks2);
   const tops2 = [];
   for (const stack of stacks2) {
     tops2.push(stack[stack.length - 1]);

@@ -16,9 +16,9 @@ export default function App() {
       <h1 className='m-3'>Advent of Code</h1>
       <div className='container'>
         <div className='row'>
-          {/* <Card>
+          <Card>
             <Seventh />
-          </Card> */}
+          </Card>
           <Card>
             <Sixth />
           </Card>

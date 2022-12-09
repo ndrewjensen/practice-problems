@@ -1,37 +1,61 @@
 export interface TerminalTree {
-    root: TTNode;
-    dirs: Set<TTNode>;
-  }
-  
-  export class TerminalTree {
-    constructor(root: TTNode, dirs: Set<TTNode> = new Set([root])) {
-      this.root = root;
-      this.dirs = dirs;
-    }
-  }
-  
-  export interface TTNode {
-    val: string;
-    parent: TTNode | null;
-    childDirs: TTNode[];
-    fileSizes: number[];
-  }
-  
-  export class TTNode {
-    constructor(
-      val: string,
-      parent: TTNode | null = null,
-      childDirs: TTNode[] = [],
-      fileSizes: number[] = [],
-    ) {
-      this.val = val;
-      this.parent = parent;
-      this.childDirs = childDirs;
-      this.fileSizes = fileSizes;
-    }
-  }
+  root: TTNode;
+  dirs: Record<string, TTNode>;
+}
 
-export const commands = [
+export class TerminalTree {
+  constructor(root: TTNode, dirs: Record<string, TTNode> = {}) {
+    this.root = root;
+    this.dirs = dirs;
+    this.dirs[root.val] = root;
+  }
+}
+
+export interface TTNode {
+  val: string;
+  parent: TTNode | null;
+  childDirs: TTNode[];
+  fileSizes: number[];
+}
+
+export class TTNode {
+  constructor(
+    val: string,
+    parent: TTNode | null = null,
+    childDirs: TTNode[] = [],
+    fileSizes: number[] = [],
+  ) {
+    this.val = val;
+    this.parent = parent;
+    this.childDirs = childDirs;
+    this.fileSizes = fileSizes;
+  }
+}
+
+export const terminalOutputs = [
+  //   "$ cd /",
+  // "$ ls",
+  // "dir a",
+  // "14848514 b.txt",
+  // "8504156 c.dat",
+  // "dir d",
+  // "$ cd a",
+  // "$ ls",
+  // "dir e",
+  // "29116 f",
+  // "2557 g",
+  // "62596 h.lst",
+  // "$ cd e",
+  // "$ ls",
+  // "584 i",
+  // "$ cd ..",
+  // "$ cd ..",
+  // "$ cd d",
+  // "$ ls",
+  // "4060174 j",
+  // "8033020 d.log",
+  // "5626152 d.ext",
+  // "7214296 k",
   "$ cd /",
   "$ ls",
   "149291 cgc.vzv",
@@ -138,7 +162,7 @@ export const commands = [
   "$ ls",
   "dir hnbrd",
   "$ cd hnbrd",
-  "$ ls",
+  // "$ ls",
   "102906 lftjtq.gdt",
   "45082 vsptqdv",
   "$ cd ..",
@@ -322,7 +346,7 @@ export const commands = [
   "$ cd ..",
   "$ cd ..",
   "$ cd pdtjlb",
-  "$ ls",
+  "$ ls", // the problem is around here
   "101237 hwqvsl",
   "dir jssl",
   "dir ngfllcq",

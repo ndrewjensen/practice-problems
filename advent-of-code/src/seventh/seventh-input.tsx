@@ -1,6 +1,7 @@
 export interface TerminalTree {
   root: TTNode;
   dirs: Record<string, TTNode>;
+  size: number,
 }
 
 export class TerminalTree {
@@ -8,6 +9,7 @@ export class TerminalTree {
     this.root = root;
     this.dirs = dirs;
     this.dirs[root.val] = root;
+    this.size = 0;
   }
 }
 
@@ -16,6 +18,7 @@ export interface TTNode {
   parent: TTNode | null;
   childDirs: TTNode[];
   fileSizes: number[];
+  totalSize: number;
 }
 
 export class TTNode {
@@ -29,6 +32,7 @@ export class TTNode {
     this.parent = parent;
     this.childDirs = childDirs;
     this.fileSizes = fileSizes;
+    this.totalSize = 0;
   }
 }
 

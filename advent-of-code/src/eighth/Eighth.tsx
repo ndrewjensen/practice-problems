@@ -109,13 +109,10 @@ export default function Eighth(): JSX.Element {
         j++;
       }
       factors.push(factor);
-      console.log("x,y,height",x,y,currHeight)
-      console.log(factors)
       bestView = Math.max(
         factors.reduce((a: number, b: number) => a * b, 1),
         bestView,
       );
-      console.log("bestView",bestView);
     }
   }
 
@@ -123,9 +120,10 @@ export default function Eighth(): JSX.Element {
     <div className='Eighth card-body'>
       <h5 className='card-title'>December 8th: Treetop Tree House</h5>
       <p className='card-text'>
-        Number of trees visible from outside the grove: {visibleTreeCount}.
+        (Example) Number of trees visible from outside the grove: {visibleTreeCount}.
       </p>
-      <p className='card-text'>Best view score: {bestView}.</p>
+      <p className='card-text'>(Example) Best view score: {bestView}.</p>
+      <p>This input was very large, and the code is not well optimized, so the above solutions are for the sample data set.</p>
     </div>
   );
 }

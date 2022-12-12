@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Card } from "react-bootstrap";
 import First from "./first/First";
 import Second from "./second/Second";
 import Third from "./third/Third";
@@ -9,7 +10,8 @@ import Fifth from "./fifth/Fifth";
 import Sixth from "./sixth/Sixth";
 import Seventh from "./seventh/Seventh";
 import Eighth from "./eighth/Eighth";
-import { Card } from "react-bootstrap";
+import Ninth from "./ninth/Ninth";
+
 
 export default function App() {
   return (
@@ -17,6 +19,9 @@ export default function App() {
       <h1 className='m-3'>Advent of Code</h1>
       <div className='container'>
         <div className='row'>
+          <Card>
+            <Ninth />
+          </Card>
           <Card>
             <Eighth />
           </Card>

@@ -1,7 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { instructions } from "./tenth-input";
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 
 export default function Tenth(): JSX.Element {
   const pixels: string[] = [];
@@ -20,7 +19,6 @@ export default function Tenth(): JSX.Element {
     pixels.push((Math.abs((cycle[0] % 40) - x) <= 1) ? " # " : " . ")
     cycle[0]++;
     if (cycles[cycle[0]] === 0) cycles[cycle[0]] = cycle[0] * x;
-    console.log("cycle,x", cycle[0],x)
     x = 1;
   }
 
@@ -31,7 +29,6 @@ export default function Tenth(): JSX.Element {
       cycleUp(cycle, x);
       cycleUp(cycle, x);
       x += Number(instruction.split(" ")[1]);
-      console.log(Number(instruction.split(" ")[1]));
     }
   }
 
@@ -43,7 +40,6 @@ export default function Tenth(): JSX.Element {
     i+=40;
   }
 
-  console.log(display);
   return (
     <div className='Tenth card-body'>
       <h5 className='card-title'>December 10th: Cathode Ray Tube</h5>

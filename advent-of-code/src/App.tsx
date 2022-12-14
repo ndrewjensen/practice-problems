@@ -12,6 +12,7 @@ import Seventh from "./seventh/Seventh";
 import Eighth from "./eighth/Eighth";
 import Ninth from "./ninth/Ninth";
 import Tenth from "./tenth/Tenth";
+import Eleventh from "./eleventh/Eleventh";
 
 
 export default function App() {
@@ -20,6 +21,9 @@ export default function App() {
       <h1 className='m-3'>Advent of Code</h1>
       <div className='container'>
         <div className='row'>
+          <Card>
+            <Eleventh />
+          </Card>
           <Card>
             <Tenth />
           </Card>

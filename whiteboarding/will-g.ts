@@ -36,38 +36,38 @@ output: [ ["practice", "3"], ["perfect", "2"],
           */
 
 function wordCountEngine(document: string) {
-  //need some edge case handling on multiple spaces and leading and trailing spaces
+	//need some edge case handling on multiple spaces and leading and trailing spaces
 
-  //remove leading and trailing whitespace, make lowercase, and strip out punctuation
-  document = document
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z\s]/gi, "")
-    .replace(/  +/g, " ");
+	//remove leading and trailing whitespace, make lowercase, and strip out punctuation
+	document = document
+		.trim()
+		.toLowerCase()
+		.replace(/[^a-z\s]/gi, "")
+		.replace(/  +/g, " ");
 
-  const words = document.split(" ");
-  const freqCount = new Map();
+	const words = document.split(" ");
+	const freqCount = new Map();
 
-  //build frequency counter
-  for (let word of words) {
-    if (freqCount.has(word)) {
-      freqCount.set(word, freqCount.get(word) + 1);
-    } else {
-      freqCount.set(word, 1);
-    }
-  }
+	//build frequency counter
+	for (let word of words) {
+		if (freqCount.has(word)) {
+			freqCount.set(word, freqCount.get(word) + 1);
+		} else {
+			freqCount.set(word, 1);
+		}
+	}
 
-  //convert frequencies to an array and sort them by the freq, which is the
-  //second value in the tuple
-  const output = [...freqCount.entries()];
-  output.sort((a, b) => b[1] - a[1]);
+	//convert frequencies to an array and sort them by the freq, which is the
+	//second value in the tuple
+	const output = [...freqCount.entries()];
+	output.sort((a, b) => b[1] - a[1]);
 
-  //stringify the frequencies, per the example
-  for (let word of output) {
-    word[1] = `${word[1]}`;
-  }
+	//stringify the frequencies, per the example
+	for (let word of output) {
+		word[1] = `${word[1]}`;
+	}
 
-  return output;
+	return output;
 }
 
 /*
@@ -121,61 +121,185 @@ the cypher
 */
 
 function encrypt(message: string, key: string) {
-  const cypher = new Set();
-  const abcd = {
-    a: "",
-    b: "",
-    c: "",
-    d: "",
-    e: "",
-    f: "",
-    g: "",
-    h: "",
-    i: "",
-    j: "",
-    k: "",
-    l: "",
-    m: "",
-    n: "",
-    o: "",
-    p: "",
-    q: "",
-    r: "",
-    s: "",
-    t: "",
-    u: "",
-    v: "",
-    w: "",
-    x: "",
-    y: "",
-    z: "",
-  };
-  key = key
-    .trim()
-    .replace(/[^a-z\s]/gi, "") // remove punctuation
-    .replace(/  +/g, " "); // remove 2 or more spaces
+	const cypher = new Set();
+	const abcd = {
+		a: "",
+		b: "",
+		c: "",
+		d: "",
+		e: "",
+		f: "",
+		g: "",
+		h: "",
+		i: "",
+		j: "",
+		k: "",
+		l: "",
+		m: "",
+		n: "",
+		o: "",
+		p: "",
+		q: "",
+		r: "",
+		s: "",
+		t: "",
+		u: "",
+		v: "",
+		w: "",
+		x: "",
+		y: "",
+		z: "",
+	};
+	key = key
+		.trim()
+		.replace(/[^a-z\s]/gi, "") // remove punctuation
+		.replace(/  +/g, " "); // remove 2 or more spaces
 
-  for (let char of key) {
-    if (!cypher.has(char)) {
-      cypher.add(char);
-    }
-  }
-  const cypherArray = [...cypher];
-  let i = 0;
-  for (let char in abcd) {
-    abcd[char] = cypherArray[i];
-    i++;
-  }
-  const messageArray = message.split("");
-  for (let j = 0; j < messageArray.length; j++) {
-    if (messageArray[j].toLowerCase() in abcd) {
-      if (messageArray[j] === messageArray[j].toLowerCase()) {
-        messageArray[j] = abcd[messageArray[j]];
-      } else {
-        messageArray[j] = abcd[messageArray[j].toLowerCase()].toUpperCase();
-      }
-    }
-  }
+	for (let char of key) {
+		if (!cypher.has(char)) {
+			cypher.add(char);
+		}
+	}
+	const cypherArray = [...cypher];
+	let i = 0;
+	for (let char in abcd) {
+		abcd[char] = cypherArray[i];
+		i++;
+	}
+	const messageArray = message.split("");
+	for (let j = 0; j < messageArray.length; j++) {
+		if (messageArray[j].toLowerCase() in abcd) {
+			if (messageArray[j] === messageArray[j].toLowerCase()) {
+				messageArray[j] = abcd[messageArray[j]];
+			} else {
+				messageArray[j] = abcd[messageArray[j].toLowerCase()].toUpperCase();
+			}
+		}
+	}
 
-  return messageArray.join("");
+	return messageArray.join("");
 }
+
+/*
+Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
+
+Implement the LRUCache class:
+
+LRUCache(int capacity) 
+-Initialize the LRU cache with positive size capacity.
+
+int get(int key) 
+Return the value of the key if the key exists, otherwise return -1.
+
+void put(int key, int value) 
+Update the value of the key if the key exists. 
+Otherwise, add the key-value pair to the cache. 
+
+If the number of keys exceeds 
+the capacity from this operation, evict the least recently used key.
+
+The functions get and put must each run in O(1) average time complexity.
+
+Queue 
+
+capacity
+enqueue
+dequeue
+hash table of all nodes
+head
+tail
+put - find the node, and update - remove the node from its place, and enqueue, 
+or dequeue and enqueue
+
+Node 
+next
+previous
+
+// use case: cache the last ten calls to an API, use an LRU cache
+
+*/
+
+interface CNode {
+	key: number;
+	val: number;
+	next: CNode | null;
+	prev: CNode | null;
+}
+
+class CNode {
+	constructor(
+		key: number = 0,
+		val: number = 0,
+		next: CNode | null = null,
+		prev: CNode | null = null,
+	) {
+		this.key = key;
+		this.val = val;
+		this.next = next;
+		this.prev = prev;
+	}
+}
+
+interface Queue {
+	capacity: number;
+	length: number;
+	head: CNode;
+	tail: CNode;
+	cnodes: Record<number, CNode>;
+}
+
+class Queue {
+	constructor(capacity: number) {
+		this.capacity = capacity;
+		this.length = 0;
+		this.head = new CNode();
+		this.tail = this.head;
+		this.cnodes = {};
+	}
+
+	enqueue(node: CNode): CNode {
+		this.tail.next = node;
+		this.tail = node;
+		this.length++;
+		this.cnodes[node.key] = node;
+		return node;
+	}
+
+	dequeue(): CNode | null {
+		const node = this.head.next;
+		if (!node) return null;
+		this.head.next = node.next;
+		this.length--;
+		delete this.cnodes[node.key];
+		return node;
+	}
+
+	get(key: number): number {
+    const node = this.cnodes[key];
+    if (node) {
+      node.prev!.next = node.next
+      this.tail.next = node;
+      this.tail = node;
+    }
+		return this.cnodes[key] ? this.cnodes[key].val : -1;
+	}
+
+	put(key: number, val: number): void {
+		const result = this.get(key);
+    if (result !== -1) {
+			this.cnodes[key].val = val;
+		} else {
+			this.enqueue(new CNode(key, val));
+		}
+		if (this.length > this.capacity) this.dequeue();
+	}
+}
+
+// FIXME: need to update all the prev
+// can avoid the prev on the node class by having all the keys point to
+// the node before.
+
+// A map does all of this built in because it uses a linked list to store
+// its entries
+
+// map.keys.next.value

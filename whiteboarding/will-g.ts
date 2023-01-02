@@ -259,6 +259,7 @@ class Queue {
 
 	enqueue(node: CNode): CNode {
 		this.tail.next = node;
+		node.prev = this.tail;
 		this.tail = node;
 		this.length++;
 		this.cnodes[node.key] = node;
@@ -269,24 +270,25 @@ class Queue {
 		const node = this.head.next;
 		if (!node) return null;
 		this.head.next = node.next;
+		if (node.next) node.next.prev = this.head;
 		this.length--;
 		delete this.cnodes[node.key];
 		return node;
 	}
 
 	get(key: number): number {
-    const node = this.cnodes[key];
-    if (node) {
-      node.prev!.next = node.next
-      this.tail.next = node;
-      this.tail = node;
-    }
+		const node = this.cnodes[key];
+		if (node) {
+			node.prev!.next = node.next;
+			this.tail.next = node;
+			this.tail = node;
+		}
 		return this.cnodes[key] ? this.cnodes[key].val : -1;
 	}
 
 	put(key: number, val: number): void {
 		const result = this.get(key);
-    if (result !== -1) {
+		if (result !== -1) {
 			this.cnodes[key].val = val;
 		} else {
 			this.enqueue(new CNode(key, val));
@@ -294,12 +296,113 @@ class Queue {
 		if (this.length > this.capacity) this.dequeue();
 	}
 }
-
-// FIXME: need to update all the prev
-// can avoid the prev on the node class by having all the keys point to
-// the node before.
-
 // A map does all of this built in because it uses a linked list to store
 // its entries
 
 // map.keys.next.value
+
+/*
+You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
+
+Merge all the linked-lists into one sorted linked-list and return it.
+
+-declare an empty output list
+-iterate through list of linked lists
+	-taking two lists at a time, merge them
+	-push the merged ll into the output
+-recurse using the output
+
+// TODO: refactor this using a min heap
+*/
+
+interface ListNode {
+	val: number;
+	next: ListNode | null;
+}
+
+class ListNode {
+	val = 0;
+	next: ListNode | null = null;
+}
+
+function mergeLinkedLists(list: ListNode[]) {
+	if (list.length === 1) return list;
+	const mergedLists: ListNode[] = [];
+	for (let i = 0; i < list.length; i += 2) {
+		mergedLists.push(merge(list[i], list[i + 1]));
+	}
+	return mergeLinkedLists(mergedLists);
+}
+
+function merge(node1: ListNode, node2?: ListNode) {
+	return new ListNode();
+}
+
+/*
+Given the root of a binary tree and an integer targetSum, return all 
+root-to-leaf paths where the sum of the node values in the path equals 
+targetSum. Each path should be returned as a list of the node values, not node 
+references.
+
+A root-to-leaf path is a path starting from the root and ending at any leaf
+node. A leaf is a node with no children.
+
+-recursive, depth first search
+-arguments
+	- target sum
+	- ouptput array of arrays of node values
+	- current array of node values
+	- currNode
+	- sum def 0
+
+	- add the currNode val to the sum
+	- add currNode val to curr array
+	- if is targetsum then push the curr array into the output array 
+	-if left then recurse left
+	-if right then recurse right
+
+	- sutract node.val from sum
+	- pop from curr array
+	- return
+
+	this is called backtracking
+*/
+
+interface TreeNode {
+	val: number;
+	left?: TreeNode;
+	right?: TreeNode;
+}
+
+class TreeNode {
+	val = 0;
+	left?: TreeNode;
+	right?: TreeNode;
+
+	constructor(val: number, left?: TreeNode, right?: TreeNode) {
+		this.val = val;
+		this.left = left;
+		this.right = right;
+	}
+}
+
+
+
+function pathSum(
+	root: TreeNode,
+	target: number,
+	output: number[][] = [],
+	current: number[],
+	sum: number = 0,
+) {
+	sum += root.val;
+	current.push(root.val);
+	
+	if (root.left) pathSum(root.left, target, output, current, sum);
+	if (root.right) pathSum(root.right, target, output, current, sum);
+	if (sum === target && !root.left && !root.right) output.push([...current]);
+
+	current.pop();
+	return output;
+}
+

@@ -335,6 +335,7 @@ function mergeLinkedLists(list: ListNode[]) {
 }
 
 function merge(node1: ListNode, node2?: ListNode) {
+	// the code isn't writter here, but assume this merges two 
 	return new ListNode();
 }
 
@@ -406,3 +407,58 @@ function pathSum(
 	return output;
 }
 
+
+/*
+Koko loves to eat bananas. There are n piles of bananas, the ith pile has
+piles[i] bananas. The guards have gone and will come back in h hours.
+
+Koko can decide her bananas-per-hour eating speed of k. Each hour, she chooses
+some pile of bananas and eats k bananas from that pile. If the pile has less
+than k bananas, she eats all of them instead and will not eat any more bananas
+during this hour.
+
+Koko likes to eat slowly but still wants to finish eating all the bananas before
+the guards return.
+
+Return the minimum integer k such that she can eat all the bananas within h hours.
+
+n piles
+k ban/hour
+h hours
+assume n >= h 
+
+
+if n=h, then k = size of the biggest pile;
+spread piles into math.max to determin max pile size
+
+binary search between 1 and maxpile
+for current k, check to see if Koko can finish all the bananas in h hours.
+	-declare a sum of hours
+	-iterate through piles, adding to hourSum the ceil of the size of the pile / k
+if at the end of the loop, hourSum < h, return k
+
+
+*/
+
+
+function minEatingSpeed(piles: number[], h: number) {
+	let right = Math.max(...piles);
+	let left = 1;
+	let k = right;
+	let minK: number;
+
+	while (left < right) {
+		k = left + right >> 1;
+		let hourSum = 0;
+		for (let pile of piles) {
+			hourSum += (Math.ceil(pile / k))
+		}
+		if (hourSum <= h) {
+			minK = k;
+			right = k;
+		} else {
+			left = k + 1;
+		}
+	}
+	return right;
+}

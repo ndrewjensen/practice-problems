@@ -335,7 +335,7 @@ function mergeLinkedLists(list: ListNode[]) {
 }
 
 function merge(node1: ListNode, node2?: ListNode) {
-	// the code isn't writter here, but assume this merges two 
+	// the code isn't written here, but assume this merges two 
 	return new ListNode();
 }
 
@@ -393,17 +393,20 @@ function pathSum(
 	root: TreeNode,
 	target: number,
 	output: number[][] = [],
-	current: number[],
+	current: number[] = [],
 	sum: number = 0,
 ) {
-	sum += root.val;
-	current.push(root.val);
-	
-	if (root.left) pathSum(root.left, target, output, current, sum);
-	if (root.right) pathSum(root.right, target, output, current, sum);
-	if (sum === target && !root.left && !root.right) output.push([...current]);
+	if (root) {
 
-	current.pop();
+		if (root.val) sum += root.val;
+		current.push(root.val);
+		
+		if (root.left) pathSum(root.left, target, output, current, sum);
+		if (root.right) pathSum(root.right, target, output, current, sum);
+		if (sum === target && !root.left && !root.right) output.push([...current]);
+	
+		current.pop();
+	}
 	return output;
 }
 
@@ -420,12 +423,13 @@ during this hour.
 Koko likes to eat slowly but still wants to finish eating all the bananas before
 the guards return.
 
-Return the minimum integer k such that she can eat all the bananas within h hours.
+Return the minimum integer k such that she can eat all the bananas within h
+hours.
 
 n piles
 k ban/hour
 h hours
-assume n >= h 
+assume n <= h 
 
 
 if n=h, then k = size of the biggest pile;
@@ -448,7 +452,7 @@ function minEatingSpeed(piles: number[], h: number) {
 	let minK: number;
 
 	while (left < right) {
-		k = left + right >> 1;
+		k = left + right >> 1; // left + right divided by 2^1
 		let hourSum = 0;
 		for (let pile of piles) {
 			hourSum += (Math.ceil(pile / k))
@@ -457,7 +461,7 @@ function minEatingSpeed(piles: number[], h: number) {
 			minK = k;
 			right = k;
 		} else {
-			left = k + 1;
+			left = k + 1; //need to research
 		}
 	}
 	return right;

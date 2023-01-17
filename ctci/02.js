@@ -297,11 +297,11 @@ function sumLists(list1, list2) {
       node1 = node1.next;
       node2 = node2.next;
     } else if (node1) {
-      sumList.pushNodeRight(new Node(node1.val + overflow));
+      sumList.pushNodeRight(new Node((node1.val + overflow) % 10));
       overflow = Math.floor((node1.val + overflow) / 10);
       node1 = node1.next;
     } else if (node2) {
-      sumList.pushNodeRight(new Node(node2.val + overflow));
+      sumList.pushNodeRight(new Node((node2.val + overflow) % 10));
       overflow = Math.floor((node2.val + overflow) / 10);
       node2 = node2.next;
     }

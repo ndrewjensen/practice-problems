@@ -22,16 +22,15 @@ function removeNthFromEnd(head: ListNode | null, n: number): ListNode | null {
 		i++;
 	}
 
+	if (!fast) return slow.next
+
 	while (fast && fast.next) {
 		fast = fast.next;
 		if (slow.next) slow = slow.next;
-		i++;
 	}
 
 	if (n === 1) {
 		slow.next = null;
-	} else if (i === n && !fast) {
-		return slow!.next;
 	} else {
 		slow.next = slow.next!.next;
 	}

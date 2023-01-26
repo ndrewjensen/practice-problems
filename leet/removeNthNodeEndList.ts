@@ -1,3 +1,5 @@
+/* https://leetcode.com/problems/remove-nth-node-from-end-of-list/description/ */
+
 class ListNode {
 	val: number;
 	next: ListNode | null;
@@ -8,10 +10,12 @@ class ListNode {
 }
 
 function removeNthFromEnd(head: ListNode | null, n: number): ListNode | null {
-	let fast: ListNode | null = head;
-	let slow: ListNode | null = head;
-	let i = 0;
-	if (!fast || !fast.next) return null;
+	if (!head || !head.next) return null;
+
+	let fast: ListNode | null = head.next;
+	let slow: ListNode = head;
+	
+	let i = 1;
 
 	while (i < n) {
 		fast = fast!.next;
@@ -19,19 +23,17 @@ function removeNthFromEnd(head: ListNode | null, n: number): ListNode | null {
 	}
 
 	while (fast && fast.next) {
-		fast = fast!.next;
-		slow = slow!.next;
+		fast = fast.next;
+		if (slow.next) slow = slow.next;
+		i++;
 	}
 
 	if (n === 1) {
-		slow!.next = null;
-	} else if (fast === head) {
-    head = slow!.next
-  }else {
-		slow!.next = fast;
+		slow.next = null;
+	} else if (i === n && !fast) {
+		return slow!.next;
+	} else {
+		slow.next = slow.next!.next;
 	}
-
 	return head;
 }
-
-//TODO: finish this 

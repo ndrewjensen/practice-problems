@@ -22,7 +22,7 @@ function removeNthFromEnd(head: ListNode | null, n: number): ListNode | null {
 		i++;
 	}
 
-	if (!fast) return slow.next
+	if (!fast) return head.next
 
 	while (fast && fast.next) {
 		fast = fast.next;
